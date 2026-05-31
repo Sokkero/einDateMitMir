@@ -38,7 +38,7 @@ export default function DatePage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-md items-center justify-center px-6 py-12">
+    <main className="mx-auto flex min-h-dvh max-w-2xl items-center justify-center px-6 py-12">
       <AnimatePresence mode="wait" custom={direction}>
         <motion.div
           key={step}
@@ -66,7 +66,21 @@ export default function DatePage() {
               onNext={() => go(2)}
             />
           )}
-          {step === 2 && <StepActivities onBack={() => go(1)} />}
+          {step === 2 && (
+            <StepActivities
+              selected={answers.activities}
+              onToggle={(id: string) =>
+                setAnswers((a) => ({
+                  ...a,
+                  activities: a.activities.includes(id)
+                    ? a.activities.filter((x) => x !== id)
+                    : [...a.activities, id],
+                }))
+              }
+              onBack={() => go(1)}
+              onNext={() => go(3)}
+            />
+          )}
         </motion.div>
       </AnimatePresence>
     </main>
