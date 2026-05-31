@@ -1,0 +1,10 @@
+[
+  { "id": "cinema", "icon": "🎬", "labelKey": "activities.cinema" },
+  { "id": "coffee", "icon": "☕", "labelKey": "activities.coffee" },
+  { "id": "dinner", "icon": "🍝", "labelKey": "activities.dinner" },
+  { "id": "walk", "icon": "🌳", "labelKey": "activities.walk" },
+  { "id": "picnic", "icon": "🧺", "labelKey": "activities.picnic" },
+  { "id": "gym", "icon": "🏋️", "labelKey": "activities.gym" },
+  { "id": "bowling", "icon": "🎳", "labelKey": "activities.bowling" },
+  { "id": "concert", "icon": "🎵", "labelKey": "activities.concert" }
+]

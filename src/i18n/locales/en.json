@@ -1,0 +1,57 @@
+{
+  "app": {
+    "title": "einDateMitMir"
+  },
+  "landing": {
+    "headline": "Invite someone on a date 💘",
+    "subline": "Create a cute link and surprise your crush.",
+    "yourName": "Your name",
+    "theirName": "Their name",
+    "yourEmail": "Your email address",
+    "generate": "Create link",
+    "copy": "Copy link",
+    "copied": "Copied!",
+    "linkReady": "Your link is ready:"
+  },
+  "date": {
+    "ask": {
+      "question": "Would you like to go out with {{name}}?",
+      "yes": "Yes!",
+      "no": "No"
+    },
+    "day": {
+      "title": "Which day works best for you?",
+      "timeOfDay": "Time of day",
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening"
+    },
+    "activities": {
+      "title": "What shall we do?"
+    },
+    "note": {
+      "title": "Leave a sweet note",
+      "placeholder": "Write something sweet ...",
+      "submit": "Send"
+    },
+    "done": {
+      "title": "Yay! 🎉",
+      "message": "Your answer is on its way."
+    },
+    "invalidLink": "Sorry, this link is invalid."
+  },
+  "activities": {
+    "cinema": "Cinema",
+    "coffee": "Coffee date",
+    "dinner": "Dinner",
+    "walk": "Walk in the park",
+    "picnic": "Picnic",
+    "gym": "Gym",
+    "bowling": "Bowling",
+    "concert": "Concert"
+  },
+  "language": {
+    "de": "DE",
+    "en": "EN"
+  }
+}

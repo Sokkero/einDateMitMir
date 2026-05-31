@@ -1,0 +1,57 @@
+{
+  "app": {
+    "title": "einDateMitMir"
+  },
+  "landing": {
+    "headline": "Lade jemanden auf ein Date ein 💘",
+    "subline": "Erstelle einen süßen Link und überrasche deinen Schwarm.",
+    "yourName": "Dein Name",
+    "theirName": "Ihr/Sein Name",
+    "yourEmail": "Deine E-Mail-Adresse",
+    "generate": "Link erstellen",
+    "copy": "Link kopieren",
+    "copied": "Kopiert!",
+    "linkReady": "Dein Link ist fertig:"
+  },
+  "date": {
+    "ask": {
+      "question": "Möchtest du mit {{name}} ausgehen?",
+      "yes": "Ja!",
+      "no": "Nein"
+    },
+    "day": {
+      "title": "Welcher Tag passt dir am besten?",
+      "timeOfDay": "Tageszeit",
+      "morning": "Morgens",
+      "afternoon": "Nachmittags",
+      "evening": "Abends"
+    },
+    "activities": {
+      "title": "Was sollen wir unternehmen?"
+    },
+    "note": {
+      "title": "Hinterlasse eine süße Nachricht",
+      "placeholder": "Schreib etwas Liebes ...",
+      "submit": "Absenden"
+    },
+    "done": {
+      "title": "Juhu! 🎉",
+      "message": "Deine Antwort ist unterwegs."
+    },
+    "invalidLink": "Dieser Link ist leider ungültig."
+  },
+  "activities": {
+    "cinema": "Kino",
+    "coffee": "Kaffee-Date",
+    "dinner": "Abendessen",
+    "walk": "Spaziergang",
+    "picnic": "Picknick",
+    "gym": "Sport / Gym",
+    "bowling": "Bowling",
+    "concert": "Konzert"
+  },
+  "language": {
+    "de": "DE",
+    "en": "EN"
+  }
+}
