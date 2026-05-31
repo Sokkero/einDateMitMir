@@ -26,6 +26,10 @@
       "afternoon": "Nachmittags",
       "evening": "Abends"
     },
+    "nav": {
+      "next": "Weiter",
+      "back": "Zurück"
+    },
     "activities": {
       "title": "Was sollen wir unternehmen?"
     },

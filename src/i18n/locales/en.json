@@ -26,6 +26,10 @@
       "afternoon": "Afternoon",
       "evening": "Evening"
     },
+    "nav": {
+      "next": "Next",
+      "back": "Back"
+    },
     "activities": {
       "title": "What shall we do?"
     },

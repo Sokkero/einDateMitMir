@@ -1,0 +1,30 @@
+// Answers collected across the multi-step date form (see docs/MVP.md §6.2).
+// Nothing is persisted until final submit; this is just in-memory wizard state.
+
+export type TimeOfDay = 'morning' | 'afternoon' | 'evening'
+
+export interface DateAnswers {
+  /** Chosen day as a local ISO date string (yyyy-mm-dd), or null. */
+  date: string | null
+  /** Chosen time of day, or null. */
+  timeOfDay: TimeOfDay | null
+  /** Selected activity ids (see src/config/activities.json). */
+  activities: string[]
+  /** Optional sweet note from the invitee. */
+  note: string
+}
+
+export const emptyAnswers: DateAnswers = {
+  date: null,
+  timeOfDay: null,
+  activities: [],
+  note: '',
+}
+
+/** Format a local date as yyyy-mm-dd without timezone drift. */
+export function toIsoDate(d: Date): string {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}

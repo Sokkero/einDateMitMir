@@ -1,15 +1,33 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { AnimatePresence, motion } from 'framer-motion'
 import { decodeInvite } from '../lib/invite'
+import { emptyAnswers, type DateAnswers, type TimeOfDay } from '../lib/dateForm'
+import StepAsk from '../components/date/StepAsk'
+import StepDay from '../components/date/StepDay'
+import StepActivities from '../components/date/StepActivities'
 
-// Skeleton for the multi-step date form (see docs/MVP.md §6.2).
-// Steps to build: 1) the dodging-"No" ask, 2) day + time of day,
-// 3) activity tiles, 4) sweet note, then submit + confetti.
+// Slide + fade between steps. `direction` is +1 going forward, -1 going back.
+const variants = {
+  enter: (dir: number) => ({ x: dir * 80, opacity: 0 }),
+  center: { x: 0, opacity: 1 },
+  exit: (dir: number) => ({ x: dir * -80, opacity: 0 }),
+}
+
 export default function DatePage() {
   const { t } = useTranslation()
   const [params] = useSearchParams()
   const invite = useMemo(() => decodeInvite(params.get('d')), [params])
+
+  const [step, setStep] = useState(0)
+  const [direction, setDirection] = useState(1)
+  const [answers, setAnswers] = useState<DateAnswers>(emptyAnswers)
+
+  const go = (next: number) => {
+    setDirection(next > step ? 1 : -1)
+    setStep(next)
+  }
 
   if (!invite) {
     return (
@@ -20,19 +38,32 @@ export default function DatePage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-6 px-6 py-12 text-center">
-      <h1 className="text-3xl font-bold text-blush-600">
-        {t('date.ask.question', { name: invite.inviterName })}
-      </h1>
-      {/* Multi-step wizard goes here — placeholder buttons for now. */}
-      <div className="flex justify-center gap-4">
-        <button className="rounded-2xl bg-blush-500 px-6 py-3 font-semibold text-white shadow-md">
-          {t('date.ask.yes')}
-        </button>
-        <button className="rounded-2xl border border-blush-300 px-6 py-3 font-semibold text-blush-500">
-          {t('date.ask.no')}
-        </button>
-      </div>
+    <main className="mx-auto flex min-h-dvh max-w-md items-center justify-center px-6 py-12">
+      <AnimatePresence mode="wait" custom={direction}>
+        <motion.div
+          key={step}
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          className="w-full"
+        >
+          {step === 0 && <StepAsk inviterName={invite.inviterName} onYes={() => go(1)} />}
+          {step === 1 && (
+            <StepDay
+              date={answers.date}
+              timeOfDay={answers.timeOfDay}
+              onDateChange={(date: string) => setAnswers((a) => ({ ...a, date }))}
+              onTimeOfDayChange={(timeOfDay: TimeOfDay) => setAnswers((a) => ({ ...a, timeOfDay }))}
+              onBack={() => go(0)}
+              onNext={() => go(2)}
+            />
+          )}
+          {step === 2 && <StepActivities onBack={() => go(1)} />}
+        </motion.div>
+      </AnimatePresence>
     </main>
   )
 }
