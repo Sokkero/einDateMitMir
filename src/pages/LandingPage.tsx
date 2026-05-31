@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { AnimatePresence, motion } from 'framer-motion'
 import { buildInviteUrl, type Invite } from '../lib/invite'
 
 export default function LandingPage() {
@@ -70,21 +71,31 @@ export default function LandingPage() {
         </button>
       </form>
 
-      {link && (
-        <div className="flex flex-col gap-2 rounded-2xl bg-white/70 p-4 shadow-sm">
-          <p className="text-sm font-semibold text-blush-600">{t('landing.linkReady')}</p>
-          <code className="break-all rounded-lg bg-blush-50 p-2 text-xs text-blush-700">
-            {link}
-          </code>
-          <button
-            type="button"
-            onClick={handleCopy}
-            className="self-start rounded-full bg-blush-400 px-4 py-1.5 text-sm font-semibold text-white hover:bg-blush-500"
+      <AnimatePresence>
+        {link && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+            className="flex flex-col gap-2 rounded-2xl bg-white/70 p-4 shadow-sm"
           >
-            {copied ? t('landing.copied') : t('landing.copy')}
-          </button>
-        </div>
-      )}
+            <p className="whitespace-pre-line text-center text-sm font-semibold text-blush-600">
+              {t('landing.linkReady')}
+            </p>
+            <code className="break-all rounded-lg bg-blush-50 p-2 text-xs text-blush-700">
+              {link}
+            </code>
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="self-center rounded-full bg-blush-400 px-4 py-1.5 text-sm font-semibold text-white hover:bg-blush-500"
+            >
+              {copied ? t('landing.copied') : t('landing.copy')}
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   )
 }

@@ -5,6 +5,8 @@ import { motion } from 'framer-motion'
 interface Props {
   /** Inviter's name, interpolated into the question. */
   inviterName: string
+  /** Invitee's name, used for the greeting. */
+  inviteeName: string
   /** Called when "Yes" is clicked — advances to the next step. */
   onYes: () => void
 }
@@ -18,12 +20,17 @@ const DODGE_RADIUS = 90
  * on desktop it flees the cursor; on touch it re-renders away from the tap
  * point (there is no hover on touch). See docs/MVP.md §6.2.
  */
-export default function StepAsk({ inviterName, onYes }: Props) {
+export default function StepAsk({ inviterName, inviteeName, onYes }: Props) {
   const { t } = useTranslation()
   const areaRef = useRef<HTMLDivElement>(null)
   const noRef = useRef<HTMLButtonElement>(null)
-  // Offset of the No button within the play area; null until measured.
+  const yesRef = useRef<HTMLButtonElement>(null)
+  // Offsets within the play area; null until measured.
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null)
+  const [yesPos, setYesPos] = useState<{ x: number; y: number } | null>(null)
+  // Every time the No button flees, the Yes button grows a little.
+  const [dodges, setDodges] = useState(0)
+  const yesScale = Math.min(1 + dodges * 0.04, 4)
 
   const measure = useCallback(() => {
     const area = areaRef.current
@@ -37,29 +44,72 @@ export default function StepAsk({ inviterName, onYes }: Props) {
     }
   }, [])
 
-  // Place the No button centred in the play area on mount.
+  // Start both buttons side by side, the pair centred in the play area.
+  // Yes and No have identical dimensions, so `bw`/`bh` apply to both.
   useEffect(() => {
     const b = measure()
-    if (b) setPos({ x: b.maxX / 2, y: b.maxY * 0.6 })
+    if (!b) return
+    const gap = 16
+    const areaW = b.maxX + b.bw
+    const startX = Math.max(0, (areaW - (b.bw * 2 + gap)) / 2)
+    const y = b.maxY / 2
+    setYesPos({ x: startX, y })
+    setPos({ x: startX + b.bw + gap, y })
   }, [measure])
 
-  /** Jump to the spot (within the area) farthest from the given point. */
+  /**
+   * Jump to the spot (anywhere in the area) farthest from the given point,
+   * while never landing on top of the Yes button.
+   */
   const dodgeAway = useCallback(
     (pointerAreaX: number, pointerAreaY: number) => {
       const b = measure()
       if (!b) return
-      let best = { x: 0, y: 0 }
+
+      // Yes button's current footprint, in area coords (+margin to keep clear).
+      const area = areaRef.current
+      const yesEl = yesRef.current
+      let yes: { left: number; top: number; right: number; bottom: number } | null = null
+      if (area && yesEl) {
+        const ar = area.getBoundingClientRect()
+        const yr = yesEl.getBoundingClientRect()
+        const m = 16
+        yes = {
+          left: yr.left - ar.left - m,
+          top: yr.top - ar.top - m,
+          right: yr.right - ar.left + m,
+          bottom: yr.bottom - ar.top + m,
+        }
+      }
+      const hitsYes = (x: number, y: number) =>
+        !!yes &&
+        x < yes.right &&
+        x + b.bw > yes.left &&
+        y < yes.bottom &&
+        y + b.bh > yes.top
+
+      // Prefer the farthest non-overlapping candidate; fall back to farthest.
+      let best: { x: number; y: number } | null = null
       let bestDist = -1
-      for (let i = 0; i < 12; i++) {
+      let fallback = { x: 0, y: 0 }
+      let fallbackDist = -1
+      for (let i = 0; i < 32; i++) {
         const x = Math.random() * b.maxX
         const y = Math.random() * b.maxY
         const dist = Math.hypot(x + b.bw / 2 - pointerAreaX, y + b.bh / 2 - pointerAreaY)
-        if (dist > bestDist) {
+        if (dist > fallbackDist) {
+          fallbackDist = dist
+          fallback = { x, y }
+        }
+        if (!hitsYes(x, y) && dist > bestDist) {
           bestDist = dist
           best = { x, y }
         }
       }
-      setPos(best)
+      setPos(best ?? fallback)
+      // Once it has to flee, the Yes button takes centre stage.
+      setYesPos({ x: b.maxX / 2, y: b.maxY / 2 })
+      setDodges((n) => n + 1)
     },
     [measure],
   )
@@ -91,19 +141,29 @@ export default function StepAsk({ inviterName, onYes }: Props) {
   }
 
   return (
-    <div className="flex flex-col items-center gap-8 text-center">
-      <h1 className="text-3xl font-bold text-blush-600">
-        {t('date.ask.question', { name: inviterName })}
-      </h1>
+    <div className="flex flex-col items-center gap-6 text-center">
+      <div className="flex flex-col gap-2">
+        <p className="text-lg font-semibold text-blush-400">
+          {t('date.ask.greeting', { name: inviteeName })}
+        </p>
+        <h1 className="text-3xl font-bold text-blush-600">
+          {t('date.ask.question', { name: inviterName })}
+        </h1>
+      </div>
 
-      <div ref={areaRef} onMouseMove={handleAreaMouseMove} className="relative h-72 w-full max-w-sm">
-        <button
+      <div ref={areaRef} onMouseMove={handleAreaMouseMove} className="relative h-[52vh] w-full">
+        <motion.button
+          ref={yesRef}
           type="button"
           onClick={onYes}
-          className="absolute left-1/2 top-4 -translate-x-1/2 rounded-2xl bg-blush-500 px-10 py-3 text-lg font-bold text-white shadow-md transition-transform hover:scale-105 active:scale-95"
+          animate={yesPos ? { x: yesPos.x, y: yesPos.y, scale: yesScale } : { scale: yesScale }}
+          whileTap={{ scale: yesScale * 0.95 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+          style={{ position: 'absolute', left: 0, top: 0, transformOrigin: 'center', opacity: yesPos ? 1 : 0 }}
+          className="rounded-2xl border-2 border-transparent bg-blush-500 px-10 py-3 text-lg font-bold text-white shadow-md"
         >
           {t('date.ask.yes')}
-        </button>
+        </motion.button>
 
         <motion.button
           ref={noRef}

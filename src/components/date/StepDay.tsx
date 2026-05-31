@@ -7,7 +7,6 @@ interface Props {
   timeOfDay: TimeOfDay | null
   onDateChange: (iso: string) => void
   onTimeOfDayChange: (t: TimeOfDay) => void
-  onBack: () => void
   onNext: () => void
 }
 
@@ -22,7 +21,6 @@ export default function StepDay({
   timeOfDay,
   onDateChange,
   onTimeOfDayChange,
-  onBack,
   onNext,
 }: Props) {
   const { t } = useTranslation()
@@ -56,9 +54,6 @@ export default function StepDay({
       </div>
 
       <div className="mt-2 flex items-center gap-4">
-        <button type="button" onClick={onBack} className="text-sm font-semibold text-blush-500 underline">
-          {t('date.nav.back')}
-        </button>
         <button
           type="button"
           onClick={onNext}

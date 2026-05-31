@@ -11,10 +11,11 @@
     "generate": "Create link",
     "copy": "Copy link",
     "copied": "Copied!",
-    "linkReady": "Your link is ready:"
+    "linkReady": "Your link is ready!\nSend it to your crush and good luck! 🍀💕"
   },
   "date": {
     "ask": {
+      "greeting": "Hey {{name}}! 💕",
       "question": "Would you like to go out with {{name}}?",
       "yes": "Yes!",
       "no": "No"

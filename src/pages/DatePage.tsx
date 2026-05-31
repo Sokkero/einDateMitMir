@@ -50,14 +50,19 @@ export default function DatePage() {
           transition={{ duration: 0.3, ease: 'easeInOut' }}
           className="w-full"
         >
-          {step === 0 && <StepAsk inviterName={invite.inviterName} onYes={() => go(1)} />}
+          {step === 0 && (
+            <StepAsk
+              inviterName={invite.inviterName}
+              inviteeName={invite.inviteeName}
+              onYes={() => go(1)}
+            />
+          )}
           {step === 1 && (
             <StepDay
               date={answers.date}
               timeOfDay={answers.timeOfDay}
               onDateChange={(date: string) => setAnswers((a) => ({ ...a, date }))}
               onTimeOfDayChange={(timeOfDay: TimeOfDay) => setAnswers((a) => ({ ...a, timeOfDay }))}
-              onBack={() => go(0)}
               onNext={() => go(2)}
             />
           )}
