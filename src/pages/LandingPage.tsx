@@ -31,76 +31,105 @@ export default function LandingPage() {
     setCopied(true)
   }
 
+  // Field offset + width are in cqw (1% of the letter's content area) so they
+  // scale with the letter background and keep their position on the paper.
   const inputClass =
-    'w-full rounded-2xl border border-blush-200 bg-white/80 px-4 py-3 text-blush-700 placeholder-blush-300 outline-none focus:border-blush-400 focus:ring-2 focus:ring-blush-200'
+    'w-[60cqw] rounded-xl border border-blush-200 bg-white/80 px-3 py-2 text-blush-700 placeholder-blush-300 outline-none focus:border-blush-400 focus:ring-2 focus:ring-blush-200'
+  const labelClass = 'w-12 shrink-0 text-right text-sm font-semibold text-blush-500'
 
   return (
-    <main className="flex min-h-dvh items-center justify-center overflow-hidden px-2 py-2">
-      <Letter>
-        <div className="flex flex-col gap-4">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-blush-600">{t('landing.headline')}</h1>
-            <p className="mt-1 text-sm text-blush-500">{t('landing.subline')}</p>
-          </div>
+    <main className="flex min-h-dvh items-center justify-center overflow-x-clip px-2 py-2">
+      <div className="aspect-square w-[max(625px,min(94vw,94vh))] shrink-0 overflow-hidden">
+        <Letter>
+          <AnimatePresence mode="wait">
+            {!link ? (
+              // The letter: intro at top, then the To / From / Email fields + Send.
+              <motion.div
+                key="form"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                className="h-full"
+              >
+                <form onSubmit={handleSubmit} className="@container flex h-full flex-col justify-between pb-6 pt-16">
+                  <div className="text-center">
+                    <h1 className="text-xl font-bold text-blush-600">{t('landing.headline')}</h1>
+                    <p className="mt-1 whitespace-pre-line text-sm text-blush-500">
+                      {t('landing.subline')}
+                    </p>
+                  </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <input
-          className={inputClass}
-          placeholder={t('landing.yourName')}
-          value={form.inviterName}
-          onChange={update('inviterName')}
-          required
-        />
-        <input
-          className={inputClass}
-          placeholder={t('landing.theirName')}
-          value={form.inviteeName}
-          onChange={update('inviteeName')}
-          required
-        />
-        <input
-          className={inputClass}
-          type="email"
-          placeholder={t('landing.yourEmail')}
-          value={form.inviterEmail}
-          onChange={update('inviterEmail')}
-          required
-        />
-        <button
-          type="submit"
-          className="mt-2 rounded-2xl bg-blush-500 px-6 py-3 font-semibold text-white shadow-md transition-transform hover:scale-[1.02] active:scale-95"
-        >
-          {t('landing.generate')}
-        </button>
-      </form>
+                  <div className="flex flex-col items-start gap-3 pl-[12cqw]">
+                    <label className="flex items-center gap-2">
+                      <span className={labelClass}>{t('landing.to')}</span>
+                      <input
+                        className={inputClass}
+                        placeholder={t('landing.theirName')}
+                        value={form.inviteeName}
+                        onChange={update('inviteeName')}
+                        required
+                      />
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <span className={labelClass}>{t('landing.from')}</span>
+                      <input
+                        className={inputClass}
+                        placeholder={t('landing.yourName')}
+                        value={form.inviterName}
+                        onChange={update('inviterName')}
+                        required
+                      />
+                    </label>
+                    <label className="mt-6 flex items-center gap-2">
+                      <span className={labelClass}>{t('landing.email')}</span>
+                      <input
+                        className={inputClass}
+                        type="email"
+                        placeholder={t('landing.yourEmail')}
+                        value={form.inviterEmail}
+                        onChange={update('inviterEmail')}
+                        required
+                      />
+                    </label>
+                  </div>
 
-      <AnimatePresence>
-        {link && (
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-            className="flex flex-col gap-2 rounded-2xl bg-white/70 p-4 shadow-sm"
-          >
-            <p className="whitespace-pre-line text-center text-sm font-semibold text-blush-600">
-              {t('landing.linkReady')}
-            </p>
-            <code className="break-all rounded-lg bg-blush-50 p-2 text-xs text-blush-700">
-              {link}
-            </code>
-            <button
-              type="button"
-              onClick={handleCopy}
-              className="self-center rounded-full bg-blush-400 px-4 py-1.5 text-sm font-semibold text-white hover:bg-blush-500"
-            >
-              {copied ? t('landing.copied') : t('landing.copy')}
-            </button>
-          </motion.div>
-          )}
+                  <button
+                    type="submit"
+                    className="mx-auto rounded-2xl bg-blush-500 px-6 py-2.5 font-semibold text-white shadow-md transition-transform hover:scale-[1.03] active:scale-95"
+                  >
+                    {t('landing.send')}
+                  </button>
+                </form>
+              </motion.div>
+            ) : (
+              // After Send: the form fades out and the ready link takes its place.
+              <motion.div
+                key="done"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                className="flex h-full flex-col items-center justify-center gap-3 text-center"
+              >
+                <p className="whitespace-pre-line text-base font-semibold text-blush-600">
+                  {t('landing.linkReady')}
+                </p>
+                <code className="w-full max-w-[26rem] break-all rounded-lg bg-blush-50 p-2 text-xs text-blush-700">
+                  {link}
+                </code>
+                <button
+                  type="button"
+                  onClick={handleCopy}
+                  className="rounded-full bg-blush-400 px-4 py-1.5 text-sm font-semibold text-white hover:bg-blush-500"
+                >
+                  {copied ? t('landing.copied') : t('landing.copy')}
+                </button>
+              </motion.div>
+            )}
           </AnimatePresence>
-        </div>
-      </Letter>
+        </Letter>
+      </div>
     </main>
   )
 }

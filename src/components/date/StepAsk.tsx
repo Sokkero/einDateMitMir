@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 
@@ -31,6 +31,10 @@ export default function StepAsk({ inviterName, inviteeName, onYes }: Props) {
   // Every time the No button flees, the Yes button grows a little.
   const [dodges, setDodges] = useState(0)
   const yesScale = Math.min(1 + dodges * 0.04, 4)
+  // False until the start positions are measured. Used to remount the buttons
+  // so they appear directly at their spots (next to each other) rather than
+  // animating in from the top-left corner.
+  const [placed, setPlaced] = useState(false)
 
   const measure = useCallback(() => {
     const area = areaRef.current
@@ -46,7 +50,8 @@ export default function StepAsk({ inviterName, inviteeName, onYes }: Props) {
 
   // Start both buttons side by side, the pair centred in the play area.
   // Yes and No have identical dimensions, so `bw`/`bh` apply to both.
-  useEffect(() => {
+  // Runs before paint so the buttons never flash at the top-left corner.
+  useLayoutEffect(() => {
     const b = measure()
     if (!b) return
     const gap = 16
@@ -55,6 +60,7 @@ export default function StepAsk({ inviterName, inviteeName, onYes }: Props) {
     const y = b.maxY / 2
     setYesPos({ x: startX, y })
     setPos({ x: startX + b.bw + gap, y })
+    setPlaced(true)
   }, [measure])
 
   /**
@@ -153,9 +159,11 @@ export default function StepAsk({ inviterName, inviteeName, onYes }: Props) {
 
       <div ref={areaRef} onMouseMove={handleAreaMouseMove} className="relative h-64 w-full sm:h-72">
         <motion.button
+          key={`yes-${placed}`}
           ref={yesRef}
           type="button"
           onClick={onYes}
+          initial={false}
           animate={yesPos ? { x: yesPos.x, y: yesPos.y, scale: yesScale } : { scale: yesScale }}
           whileTap={{ scale: yesScale * 0.95 }}
           transition={{ type: 'spring', stiffness: 300, damping: 18 }}
@@ -166,12 +174,14 @@ export default function StepAsk({ inviterName, inviteeName, onYes }: Props) {
         </motion.button>
 
         <motion.button
+          key={`no-${placed}`}
           ref={noRef}
           type="button"
           onMouseEnter={(e) => dodgeFromClient(e.clientX, e.clientY)}
           onTouchStart={handleNoTouch}
           onClick={(e) => e.preventDefault()}
-          animate={pos ? { x: pos.x, y: pos.y } : undefined}
+          initial={false}
+          animate={pos ? { x: pos.x, y: pos.y } : { x: 0, y: 0 }}
           transition={{ type: 'spring', stiffness: 500, damping: 28 }}
           style={{ position: 'absolute', left: 0, top: 0, opacity: pos ? 1 : 0 }}
           className="rounded-2xl border-2 border-blush-300 bg-white px-10 py-3 text-lg font-bold text-blush-500 shadow-sm"
