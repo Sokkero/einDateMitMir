@@ -39,7 +39,7 @@
     },
     "sendError": "Hoppla, das hat nicht geklappt. Versuch es bitte nochmal.",
     "activities": {
-      "title": "Was sollen wir unternehmen?"
+      "title": "Was hättest du Lust mit {{name}} zu unternehmen?"
     },
     "vibe": {
       "title": "Welche Stimmung soll es sein?"
@@ -60,19 +60,26 @@
   },
   "activities": {
     "cinema": "Kino",
-    "coffee": "Kaffee-Date",
     "dinner": "Abendessen",
     "walk": "Spaziergang",
     "picnic": "Picknick",
-    "gym": "Sport / Gym",
-    "bowling": "Bowling",
-    "concert": "Konzert"
+    "gym": "Sport",
+    "netflixandchill": "Netflix & Chillen 🍿",
+    "bicycletour": "Fahrradtour",
+    "cooking": "Zusammen kochen",
+    "privateTime": "Zweisamkeit",
+    "icecream": "Eis essen",
+    "zoo": "Zoo-Besuch",
+    "hangOut": "Abhängen",
+    "coffee": "Kaffee-Date",
+    "gardening": "Gärtnern"
   },
   "vibes": {
     "casual": "Locker",
     "fancy": "Schick",
     "adventurous": "Abenteuerlich",
-    "cozy": "Gemütlich"
+    "cozy": "Gemütlich",
+    "spicy": "Feurig"
   },
   "email": {
     "subject": "💌 {{name}} hat Ja gesagt!",

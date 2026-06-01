@@ -24,13 +24,13 @@ export default function StepExcitement({ value, onChange }: Props) {
   const scale = 0.8 + (value / 100) * 2.6
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-10 pb-28">
-      <div className="flex flex-1 items-center justify-center pt-12">
+    <div className="flex w-full flex-1 flex-col items-center pt-8">
+      <div className="flex flex-1 items-center justify-center">
         <motion.span
           aria-hidden="true"
           animate={{ scale }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-          className="select-none text-7xl leading-none"
+          className="pointer-events-none select-none text-7xl leading-none"
           style={{ transformOrigin: 'center' }}
         >
           {broken ? '💔' : '❤️'}
@@ -44,7 +44,7 @@ export default function StepExcitement({ value, onChange }: Props) {
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         aria-label={t('date.excitement.title')}
-        className="w-full max-w-sm accent-blush-500"
+        className="mt-6 mb-20 w-full max-w-sm accent-blush-500"
       />
     </div>
   )

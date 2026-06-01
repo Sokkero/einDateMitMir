@@ -20,7 +20,7 @@ export default function StepVibe({ selected, onSelect }: Props) {
 
   return (
     <div className="flex w-full justify-center">
-      <div className="grid w-full max-w-sm grid-cols-2 gap-3">
+      <div className="flex w-full max-w-sm flex-wrap justify-center gap-3">
         {vibes.map((vibe) => {
           const isSelected = selected === vibe.id
           return (
@@ -30,7 +30,7 @@ export default function StepVibe({ selected, onSelect }: Props) {
               aria-pressed={isSelected}
               onClick={() => onSelect(vibe.id)}
               className={
-                'relative flex aspect-square flex-col items-center justify-center gap-1.5 rounded-3xl border-2 p-2 transition-all ' +
+                'relative flex aspect-square w-[calc((100%-0.9rem)/2)] flex-col items-center justify-center gap-1.5 rounded-3xl border-2 p-2 transition-all ' +
                 (isSelected
                   ? 'border-blush-500 bg-blush-100 shadow-md'
                   : 'border-blush-200 bg-white/70 hover:border-blush-300 hover:bg-blush-50')

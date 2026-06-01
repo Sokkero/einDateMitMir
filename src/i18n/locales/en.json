@@ -39,7 +39,7 @@
     },
     "sendError": "Oops, that didn't work. Please try again.",
     "activities": {
-      "title": "What shall we do?"
+      "title": "What would you like to do with {{name}}?"
     },
     "vibe": {
       "title": "What's the vibe?"
@@ -60,19 +60,26 @@
   },
   "activities": {
     "cinema": "Cinema",
-    "coffee": "Coffee date",
     "dinner": "Dinner",
     "walk": "Walk in the park",
     "picnic": "Picnic",
-    "gym": "Gym",
-    "bowling": "Bowling",
-    "concert": "Concert"
+    "gym": "Sports",
+    "netflixandchill": "Netflix & chill 🍿",
+    "bicycletour": "Bike ride",
+    "cooking": "Cook together",
+    "privateTime": "Alone time",
+    "icecream": "Ice cream",
+    "zoo": "Zoo trip",
+    "hangOut": "Just hang out",
+    "coffee": "Coffee date",
+    "gardening": "Gardening"
   },
   "vibes": {
     "casual": "Casual",
     "fancy": "Fancy",
     "adventurous": "Adventurous",
-    "cozy": "Cozy"
+    "cozy": "Cozy",
+    "spicy": "Spicy"
   },
   "email": {
     "subject": "💌 {{name}} said yes!",

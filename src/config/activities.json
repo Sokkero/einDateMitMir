@@ -1,10 +1,16 @@
 [
   { "id": "cinema", "icon": "cinema.svg", "labelKey": "activities.cinema" },
-  { "id": "coffee", "icon": "coffee.svg", "labelKey": "activities.coffee" },
   { "id": "dinner", "icon": "dinner.svg", "labelKey": "activities.dinner" },
   { "id": "walk", "icon": "walk.svg", "labelKey": "activities.walk" },
   { "id": "picnic", "icon": "picnic.svg", "labelKey": "activities.picnic" },
-  { "id": "gym", "icon": "gym.svg", "labelKey": "activities.gym" },
-  { "id": "bowling", "icon": "bowling.svg", "labelKey": "activities.bowling" },
-  { "id": "concert", "icon": "concert.svg", "labelKey": "activities.concert" }
+  { "id": "sports", "icon": "sports.svg", "labelKey": "activities.gym" },
+  { "id": "netflixandchill", "icon": "netflixandchill.svg", "labelKey": "activities.netflixandchill" },
+  { "id": "bicycletour", "icon": "bicycletour.svg", "labelKey": "activities.bicycletour" },
+  { "id": "cooking", "icon": "cooking.svg", "labelKey": "activities.cooking" },
+  { "id": "privateTime", "icon": "privateTime.svg", "labelKey": "activities.privateTime" },
+  { "id": "icecream", "icon": "icecream.svg", "labelKey": "activities.icecream" },
+  { "id": "zoo", "icon": "zoo.svg", "labelKey": "activities.zoo" },
+  { "id": "hangOut", "icon": "hangOut.svg", "labelKey": "activities.hangOut" },
+  { "id": "coffee", "icon": "coffee.svg", "labelKey": "activities.coffee" },
+  { "id": "gardening", "icon": "gardening.svg", "labelKey": "activities.gardening" }
 ]

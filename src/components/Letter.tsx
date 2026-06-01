@@ -22,7 +22,7 @@ export default function Letter({ children }: { children: ReactNode }) {
       />
       {/* Padding tuned to keep content on the tilted white paper region. */}
       <div className="absolute inset-0 flex items-center justify-center px-[20%] py-[13%]">
-        <div className="h-full w-full overflow-y-auto">{children}</div>
+        <div className="pretty-scrollbar h-full w-full overflow-y-auto">{children}</div>
       </div>
     </div>
   )

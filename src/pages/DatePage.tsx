@@ -216,7 +216,7 @@ export default function DatePage() {
                   transition={{ duration: 0.25, ease: 'easeInOut' }}
                   className="text-center text-2xl font-bold text-blush-600"
                 >
-                  {def && t(def.titleKey)}
+                  {def && t(def.titleKey, { name: invite.inviterName })}
                 </motion.h2>
               </AnimatePresence>
             </div>
@@ -234,7 +234,7 @@ export default function DatePage() {
                   className="absolute inset-0"
                 >
                   <Letter>
-                    <div className="flex h-full flex-col items-center justify-center">
+                    <div className="flex min-h-full flex-col items-center justify-center py-2">
                       {def?.render(answers, setAnswers, invite)}
                     </div>
                   </Letter>
