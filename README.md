@@ -1,5 +1,7 @@
 # einDateMitMir 💌
 
+https://www.einDateMitMir.com
+
 > ⚠️ **Vibe-coded project — caveat emptor.**
 > This was built fast and for fun, largely with an AI coding assistant, guided
 > by vibes more than rigor. There are no tests, the architecture favors "cute
