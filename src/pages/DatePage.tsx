@@ -7,6 +7,7 @@ import { emptyAnswers, type DateAnswers, type TimeOfDay } from '../lib/dateForm'
 import StepAsk from '../components/date/StepAsk'
 import StepDay from '../components/date/StepDay'
 import StepActivities from '../components/date/StepActivities'
+import Letter from '../components/Letter'
 
 // Slide + fade between steps. `direction` is +1 going forward, -1 going back.
 const variants = {
@@ -38,8 +39,9 @@ export default function DatePage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-2xl items-center justify-center px-6 py-12">
-      <AnimatePresence mode="wait" custom={direction}>
+    <main className="flex min-h-dvh items-center justify-center overflow-hidden px-2 py-2">
+      <Letter>
+        <AnimatePresence mode="wait" custom={direction}>
         <motion.div
           key={step}
           custom={direction}
@@ -82,7 +84,8 @@ export default function DatePage() {
             />
           )}
         </motion.div>
-      </AnimatePresence>
+        </AnimatePresence>
+      </Letter>
     </main>
   )
 }

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AnimatePresence, motion } from 'framer-motion'
 import { buildInviteUrl, type Invite } from '../lib/invite'
+import Letter from '../components/Letter'
 
 export default function LandingPage() {
   const { t } = useTranslation()
@@ -34,13 +35,15 @@ export default function LandingPage() {
     'w-full rounded-2xl border border-blush-200 bg-white/80 px-4 py-3 text-blush-700 placeholder-blush-300 outline-none focus:border-blush-400 focus:ring-2 focus:ring-blush-200'
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-6 px-6 py-12">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-blush-600">{t('landing.headline')}</h1>
-        <p className="mt-2 text-blush-500">{t('landing.subline')}</p>
-      </div>
+    <main className="flex min-h-dvh items-center justify-center overflow-hidden px-2 py-2">
+      <Letter>
+        <div className="flex flex-col gap-4">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-blush-600">{t('landing.headline')}</h1>
+            <p className="mt-1 text-sm text-blush-500">{t('landing.subline')}</p>
+          </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <input
           className={inputClass}
           placeholder={t('landing.yourName')}
@@ -94,8 +97,10 @@ export default function LandingPage() {
               {copied ? t('landing.copied') : t('landing.copy')}
             </button>
           </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+          </AnimatePresence>
+        </div>
+      </Letter>
     </main>
   )
 }

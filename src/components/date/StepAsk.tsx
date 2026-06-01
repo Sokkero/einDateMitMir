@@ -151,7 +151,7 @@ export default function StepAsk({ inviterName, inviteeName, onYes }: Props) {
         </h1>
       </div>
 
-      <div ref={areaRef} onMouseMove={handleAreaMouseMove} className="relative h-[52vh] w-full">
+      <div ref={areaRef} onMouseMove={handleAreaMouseMove} className="relative h-64 w-full sm:h-72">
         <motion.button
           ref={yesRef}
           type="button"
