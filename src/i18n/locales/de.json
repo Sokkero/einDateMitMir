@@ -38,9 +38,15 @@
     "activities": {
       "title": "Was sollen wir unternehmen?"
     },
+    "vibe": {
+      "title": "Welche Stimmung soll es sein?"
+    },
+    "excitement": {
+      "title": "Wie aufgeregt bist du?"
+    },
     "note": {
       "title": "Hinterlasse eine süße Nachricht",
-      "placeholder": "Schreib etwas Liebes ...",
+      "placeholder": "Schreib {{name}} etwas Liebes ...",
       "submit": "Absenden"
     },
     "done": {
@@ -58,6 +64,12 @@
     "gym": "Sport / Gym",
     "bowling": "Bowling",
     "concert": "Konzert"
+  },
+  "vibes": {
+    "casual": "Locker",
+    "fancy": "Schick",
+    "adventurous": "Abenteuerlich",
+    "cozy": "Gemütlich"
   },
   "language": {
     "de": "DE",

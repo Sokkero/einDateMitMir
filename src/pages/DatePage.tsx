@@ -2,12 +2,15 @@ import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { AnimatePresence, motion } from 'framer-motion'
-import { decodeInvite } from '../lib/invite'
+import { decodeInvite, type Invite } from '../lib/invite'
 import { emptyAnswers, type DateAnswers, type TimeOfDay } from '../lib/dateForm'
 import Letter from '../components/Letter'
 import StepAsk from '../components/date/StepAsk'
 import StepDay from '../components/date/StepDay'
 import StepActivities from '../components/date/StepActivities'
+import StepVibe from '../components/date/StepVibe'
+import StepExcitement from '../components/date/StepExcitement'
+import StepNote from '../components/date/StepNote'
 
 /**
  * Letter-backed steps (everything after the Ask). Each is a headline + a pure
@@ -18,7 +21,11 @@ import StepActivities from '../components/date/StepActivities'
 interface StepDef {
   titleKey: string
   canContinue: (a: DateAnswers) => boolean
-  render: (a: DateAnswers, set: React.Dispatch<React.SetStateAction<DateAnswers>>) => React.ReactNode
+  render: (
+    a: DateAnswers,
+    set: React.Dispatch<React.SetStateAction<DateAnswers>>,
+    invite: Invite,
+  ) => React.ReactNode
 }
 
 const STEPS: StepDef[] = [
@@ -48,6 +55,37 @@ const STEPS: StepDef[] = [
               : [...prev.activities, id],
           }))
         }
+      />
+    ),
+  },
+  {
+    titleKey: 'date.vibe.title',
+    canContinue: (a) => a.vibe !== null,
+    render: (a, set) => (
+      <StepVibe
+        selected={a.vibe}
+        onSelect={(id: string) => set((prev) => ({ ...prev, vibe: id }))}
+      />
+    ),
+  },
+  {
+    titleKey: 'date.excitement.title',
+    canContinue: () => true,
+    render: (a, set) => (
+      <StepExcitement
+        value={a.excitement}
+        onChange={(excitement: number) => set((prev) => ({ ...prev, excitement }))}
+      />
+    ),
+  },
+  {
+    titleKey: 'date.note.title',
+    canContinue: () => true,
+    render: (a, set, invite) => (
+      <StepNote
+        inviterName={invite.inviterName}
+        value={a.note}
+        onChange={(note: string) => set((prev) => ({ ...prev, note }))}
       />
     ),
   },
@@ -155,7 +193,7 @@ export default function DatePage() {
                 >
                   <Letter>
                     <div className="flex h-full flex-col items-center justify-center">
-                      {def?.render(answers, setAnswers)}
+                      {def?.render(answers, setAnswers, invite)}
                     </div>
                   </Letter>
                 </motion.div>

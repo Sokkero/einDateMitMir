@@ -10,6 +10,10 @@ export interface DateAnswers {
   timeOfDay: TimeOfDay | null
   /** Selected activity ids (see src/config/activities.json). */
   activities: string[]
+  /** Chosen vibe id (single-select, see src/config/vibes.json), or null. */
+  vibe: string | null
+  /** Excitement level, 0–100, from the heart-meter slider. */
+  excitement: number
   /** Optional sweet note from the invitee. */
   note: string
 }
@@ -18,6 +22,8 @@ export const emptyAnswers: DateAnswers = {
   date: null,
   timeOfDay: null,
   activities: [],
+  vibe: null,
+  excitement: 50,
   note: '',
 }
 

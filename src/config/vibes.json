@@ -1,0 +1,6 @@
+[
+  { "id": "casual", "icon": "😎", "labelKey": "vibes.casual" },
+  { "id": "fancy", "icon": "🥂", "labelKey": "vibes.fancy" },
+  { "id": "adventurous", "icon": "🧗", "labelKey": "vibes.adventurous" },
+  { "id": "cozy", "icon": "🛋️", "labelKey": "vibes.cozy" }
+]

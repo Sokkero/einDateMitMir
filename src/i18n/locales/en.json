@@ -38,9 +38,15 @@
     "activities": {
       "title": "What shall we do?"
     },
+    "vibe": {
+      "title": "What's the vibe?"
+    },
+    "excitement": {
+      "title": "How excited are you?"
+    },
     "note": {
       "title": "Leave a sweet note",
-      "placeholder": "Write something sweet ...",
+      "placeholder": "Write {{name}} something sweet ...",
       "submit": "Send"
     },
     "done": {
@@ -58,6 +64,12 @@
     "gym": "Gym",
     "bowling": "Bowling",
     "concert": "Concert"
+  },
+  "vibes": {
+    "casual": "Casual",
+    "fancy": "Fancy",
+    "adventurous": "Adventurous",
+    "cozy": "Cozy"
   },
   "language": {
     "de": "DE",
