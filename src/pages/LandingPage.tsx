@@ -112,7 +112,7 @@ export default function LandingPage() {
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
                 className="flex h-full flex-col items-center justify-center gap-3 text-center"
               >
-                <p className="whitespace-pre-line text-base font-semibold text-blush-600">
+                <p className="max-w-[34rem] whitespace-pre-line text-base font-semibold text-blush-600">
                   {t('landing.linkReady')}
                 </p>
                 <code className="w-full max-w-[26rem] break-all rounded-lg bg-blush-50 p-2 text-xs text-blush-700">

@@ -4,7 +4,7 @@
   },
   "landing": {
     "headline": "Lade jemanden auf ein Date ein 💘",
-    "subline": "Erstelle einen süßen Link und überrasche deinen Schwarm.",
+    "subline": "Erstelle süßen Link und überrasche deinen Schwarm.",
     "yourName": "Dein Name",
     "theirName": "Ihr/Sein Name",
     "yourEmail": "Deine E-Mail-Adresse",
@@ -15,7 +15,7 @@
     "generate": "Link erstellen",
     "copy": "Link kopieren",
     "copied": "Kopiert!",
-    "linkReady": "Dein Link ist fertig!\nSchick ihn deinem Schwarm und viel Glück! 🍀💕"
+    "linkReady": "Dein Link ist fertig! 🍀\nSchick ihn deinem Schwarm. Sobald das Formular ausgefüllt ist, bekommst du eine E-Mail mit der Antwort – schau bitte auch in deinen Spam-Ordner, falls sie nicht im Posteingang landet! 💕"
   },
   "date": {
     "ask": {
@@ -33,8 +33,11 @@
     },
     "nav": {
       "next": "Weiter",
-      "back": "Zurück"
+      "back": "Zurück",
+      "send": "Senden!",
+      "sending": "Senden …"
     },
+    "sendError": "Hoppla, das hat nicht geklappt. Versuch es bitte nochmal.",
     "activities": {
       "title": "Was sollen wir unternehmen?"
     },
@@ -51,7 +54,7 @@
     },
     "done": {
       "title": "Juhu! 🎉",
-      "message": "Deine Antwort ist unterwegs."
+      "message": "Wir haben deine Antwort an {{name}} geschickt.\n{{name}} meldet sich bei dir – viel Glück bei eurem Date! 💕"
     },
     "invalidLink": "Dieser Link ist leider ungültig."
   },
@@ -70,6 +73,19 @@
     "fancy": "Schick",
     "adventurous": "Abenteuerlich",
     "cozy": "Gemütlich"
+  },
+  "email": {
+    "subject": "💌 {{name}} hat Ja gesagt!",
+    "header": "{{name}}, gute Neuigkeiten! 💌",
+    "intro": "{{name}} möchte mit dir ausgehen!",
+    "day": "Tag",
+    "time": "Tageszeit",
+    "vibe": "Stimmung",
+    "excitement": "Aufregung",
+    "activities": "Aktivitäten",
+    "note": "Süße Nachricht",
+    "noteEmpty": "(keine Nachricht hinterlassen)",
+    "closing": "Meld dich bei {{name}} – viel Glück bei eurem Date! 🍀💕"
   },
   "language": {
     "de": "DE",

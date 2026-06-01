@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { AnimatePresence, motion } from 'framer-motion'
 import { decodeInvite, type Invite } from '../lib/invite'
 import { emptyAnswers, type DateAnswers, type TimeOfDay } from '../lib/dateForm'
+import { buildEmail } from '../lib/email'
+import { sendResultEmail } from '../lib/sendEmail'
 import Letter from '../components/Letter'
 import StepAsk from '../components/date/StepAsk'
 import StepDay from '../components/date/StepDay'
@@ -110,19 +112,39 @@ const headlineVariants = {
 }
 
 export default function DatePage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [params] = useSearchParams()
   const invite = useMemo(() => decodeInvite(params.get('d')), [params])
 
   const [step, setStep] = useState(0)
   const [direction, setDirection] = useState(1)
   const [answers, setAnswers] = useState<DateAnswers>(emptyAnswers)
+  // True once the send succeeds — swaps to the result screen.
+  const [done, setDone] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState(false)
 
   const go = (next: number) => {
     const clamped = Math.max(0, Math.min(LAST_STEP, next))
     if (clamped === step) return
     setDirection(clamped > step ? 1 : -1)
     setStep(clamped)
+  }
+
+  const handleSubmit = async () => {
+    if (!invite) return
+    setSending(true)
+    setError(false)
+    try {
+      const email = buildEmail(answers, invite, t, i18n.language)
+      await sendResultEmail(invite.inviterEmail, email)
+      setDone(true)
+    } catch (err) {
+      console.error('[email] send failed', err)
+      setError(true)
+    } finally {
+      setSending(false)
+    }
   }
 
   if (!invite) {
@@ -135,11 +157,31 @@ export default function DatePage() {
 
   const def = step >= 1 ? STEPS[step - 1] : null
   const canContinue = def ? def.canContinue(answers) : false
+  const isLast = step === LAST_STEP
 
   return (
     <main className="flex min-h-dvh items-center justify-center overflow-x-clip px-2 py-2">
       <AnimatePresence mode="wait" initial={false}>
-        {step === 0 ? (
+        {done ? (
+          // Result — sent. A landing-page-style letter card with a sweet wrap-up.
+          <motion.div
+            key="result"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
+            className="aspect-square w-[max(625px,min(94vw,94vh))] shrink-0 overflow-hidden"
+          >
+            <Letter>
+              <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
+                <h1 className="text-3xl font-bold text-blush-600">{t('date.done.title')}</h1>
+                <p className="max-w-xs whitespace-pre-line text-base font-semibold text-blush-500">
+                  {t('date.done.message', { name: invite.inviterName })}
+                </p>
+              </div>
+            </Letter>
+          </motion.div>
+        ) : step === 0 ? (
           // Page 1 — the Ask. No letter/headline/footer; fades out on "Yes".
           <motion.div
             key="ask"
@@ -204,25 +246,31 @@ export default function DatePage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.35, ease: 'easeInOut' }}
-              className="flex items-center gap-4 pb-2"
+              className="flex flex-col items-center gap-2 pb-2"
             >
-              {step > 1 && (
+              <div className="flex items-center gap-4">
+                {step > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => go(step - 1)}
+                    disabled={sending}
+                    className="text-sm font-semibold text-blush-500 underline disabled:opacity-40"
+                  >
+                    {t('date.nav.back')}
+                  </button>
+                )}
                 <button
                   type="button"
-                  onClick={() => go(step - 1)}
-                  className="text-sm font-semibold text-blush-500 underline"
+                  onClick={isLast ? handleSubmit : () => go(step + 1)}
+                  disabled={!canContinue || sending}
+                  className="rounded-2xl bg-blush-500 px-8 py-3 font-bold text-white shadow-md transition-transform enabled:hover:scale-105 enabled:active:scale-95 disabled:opacity-40"
                 >
-                  {t('date.nav.back')}
+                  {isLast ? (sending ? t('date.nav.sending') : t('date.nav.send')) : t('date.nav.next')}
                 </button>
+              </div>
+              {error && (
+                <p className="text-sm font-semibold text-blush-600">{t('date.sendError')}</p>
               )}
-              <button
-                type="button"
-                onClick={() => go(step + 1)}
-                disabled={!canContinue}
-                className="rounded-2xl bg-blush-500 px-8 py-3 font-bold text-white shadow-md transition-transform enabled:hover:scale-105 enabled:active:scale-95 disabled:opacity-40"
-              >
-                {t('date.nav.next')}
-              </button>
             </motion.div>
           </motion.div>
         )}
