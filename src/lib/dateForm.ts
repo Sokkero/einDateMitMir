@@ -3,6 +3,13 @@
 
 export type TimeOfDay = 'morning' | 'afternoon' | 'evening'
 
+/** German labels for each time of day, shared by the form and the email. */
+export const TIME_OF_DAY_LABELS: Record<TimeOfDay, string> = {
+  morning: 'Morgens',
+  afternoon: 'Nachmittags',
+  evening: 'Abends',
+}
+
 export interface DateAnswers {
   /** Chosen day as a local ISO date string (yyyy-mm-dd), or null. */
   date: string | null

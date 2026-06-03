@@ -4,13 +4,29 @@
 // EmailJS escapes HTML passed through a variable, so we CANNOT inject a prebuilt
 // HTML body. Instead the layout lives in the EmailJS template (typed HTML, see
 // docs/email-template.html) and we send the text pieces as plain-text params —
-// the copy still all comes from our i18n. Values are sent RAW (no manual HTML
-// escaping): EmailJS escapes them on substitution, which is what we want.
+// all the copy is German. Values are sent RAW (no manual HTML escaping):
+// EmailJS escapes them on substitution, which is what we want.
 // See docs/MVP.md §6.3.
 
-import type { TFunction } from 'i18next'
-import type { DateAnswers } from './dateForm'
+import { TIME_OF_DAY_LABELS, type DateAnswers } from './dateForm'
 import type { Invite } from './invite'
+import activities from '../config/activities.json'
+import vibes from '../config/vibes.json'
+
+/** German labels for the email, formerly the i18n `email.*` namespace. */
+const LABELS = {
+  day: 'Tag',
+  time: 'Tageszeit',
+  vibe: 'Stimmung',
+  excitement: 'Aufregung',
+  activities: 'Aktivitäten',
+  note: 'Süße Nachricht',
+} as const
+
+const ACTIVITY_LABELS: Record<string, string> = Object.fromEntries(
+  activities.map((a) => [a.id, a.label]),
+)
+const VIBE_LABELS: Record<string, string> = Object.fromEntries(vibes.map((v) => [v.id, v.label]))
 
 /** Plain-text params passed to EmailJS; names match the {{tokens}} in the
  * dashboard template (docs/email-template.html). */
@@ -48,40 +64,28 @@ function heartMeter(value: number): string {
   return '❤️'.repeat(filled) + '🤍'.repeat(5 - filled)
 }
 
-export function buildEmail(
-  answers: DateAnswers,
-  invite: Invite,
-  t: TFunction,
-  locale: string,
-): EmailParams {
-  // Localized values, in the invitee's current language.
+export function buildEmail(answers: DateAnswers, invite: Invite): EmailParams {
+  // All values render in German.
   const valueDay = answers.date
-    ? new Intl.DateTimeFormat(locale, {
+    ? new Intl.DateTimeFormat('de', {
         weekday: 'long',
         day: 'numeric',
         month: 'long',
         year: 'numeric',
       }).format(parseLocalDate(answers.date))
     : '—'
-  const valueTime = answers.timeOfDay ? t(`date.day.${answers.timeOfDay}`) : '—'
-  const valueVibe = answers.vibe ? t(`vibes.${answers.vibe}`) : '—'
-  const valueActivities = answers.activities.map((id) => t(`activities.${id}`)).join(', ')
+  const valueTime = answers.timeOfDay ? TIME_OF_DAY_LABELS[answers.timeOfDay] : '—'
+  const valueVibe = answers.vibe ? VIBE_LABELS[answers.vibe] ?? '—' : '—'
+  const valueActivities = answers.activities.map((id) => ACTIVITY_LABELS[id] ?? id).join(', ')
   const valueExcitement = heartMeter(answers.excitement)
   const note = answers.note.trim()
-  const valueNote = note || t('email.noteEmpty')
+  const valueNote = note || '(keine Nachricht hinterlassen)'
 
-  const labels = {
-    day: t('email.day'),
-    time: t('email.time'),
-    vibe: t('email.vibe'),
-    excitement: t('email.excitement'),
-    activities: t('email.activities'),
-    note: t('email.note'),
-  }
+  const labels = LABELS
 
-  const header = t('email.header', { name: invite.inviterName })
-  const intro = t('email.intro', { name: invite.inviteeName })
-  const closing = t('email.closing', { name: invite.inviteeName })
+  const header = `${invite.inviterName}, gute Neuigkeiten! 💌`
+  const intro = `${invite.inviteeName} möchte mit dir ausgehen!`
+  const closing = `Meld dich bei ${invite.inviteeName} – viel Glück bei eurem Date! 🍀💕`
 
   const message = [
     header,
@@ -100,7 +104,7 @@ export function buildEmail(
   ].join('\n')
 
   return {
-    subject: t('email.subject', { name: invite.inviteeName }),
+    subject: `💌 ${invite.inviteeName} hat Ja gesagt!`,
     header,
     intro,
     label_day: labels.day,

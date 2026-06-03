@@ -1,5 +1,4 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 
 interface Props {
@@ -21,7 +20,6 @@ const DODGE_RADIUS = 90
  * point (there is no hover on touch). See docs/MVP.md §6.2.
  */
 export default function StepAsk({ inviterName, inviteeName, onYes }: Props) {
-  const { t } = useTranslation()
   const areaRef = useRef<HTMLDivElement>(null)
   const noRef = useRef<HTMLButtonElement>(null)
   const yesRef = useRef<HTMLButtonElement>(null)
@@ -150,10 +148,10 @@ export default function StepAsk({ inviterName, inviteeName, onYes }: Props) {
     <div className="flex flex-col items-center gap-6 text-center">
       <div className="flex flex-col gap-2">
         <p className="text-lg font-semibold text-blush-400">
-          {t('date.ask.greeting', { name: inviteeName })}
+          Hey {inviteeName}! 💕
         </p>
         <h1 className="text-3xl font-bold text-blush-600">
-          {t('date.ask.question', { name: inviterName })}
+          Möchtest du mit {inviterName} ausgehen?
         </h1>
       </div>
 
@@ -170,7 +168,7 @@ export default function StepAsk({ inviterName, inviteeName, onYes }: Props) {
           style={{ position: 'absolute', left: 0, top: 0, transformOrigin: 'center', opacity: yesPos ? 1 : 0 }}
           className="rounded-2xl border-2 border-transparent bg-blush-500 px-10 py-3 text-lg font-bold text-white shadow-md"
         >
-          {t('date.ask.yes')}
+          Ja!
         </motion.button>
 
         <motion.button
@@ -186,7 +184,7 @@ export default function StepAsk({ inviterName, inviteeName, onYes }: Props) {
           style={{ position: 'absolute', left: 0, top: 0, opacity: pos ? 1 : 0 }}
           className="rounded-2xl border-2 border-blush-300 bg-white px-10 py-3 text-lg font-bold text-blush-500 shadow-sm"
         >
-          {t('date.ask.no')}
+          Nein
         </motion.button>
       </div>
     </div>

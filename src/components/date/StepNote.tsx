@@ -1,5 +1,3 @@
-import { useTranslation } from 'react-i18next'
-
 interface Props {
   /** Inviter's name, interpolated into the placeholder. */
   inviterName: string
@@ -16,14 +14,12 @@ interface Props {
  * DatePage's headline and footer. See docs/MVP.md §6.2.
  */
 export default function StepNote({ inviterName, value, onChange }: Props) {
-  const { t } = useTranslation()
-
   return (
     <div className="flex h-full w-full items-center justify-center">
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder={t('date.note.placeholder', { name: inviterName })}
+        placeholder={`Schreib ${inviterName} etwas Liebes ...`}
         rows={9}
         className="w-full max-w-sm resize-none rounded-3xl border-2 border-blush-200 bg-white/70 px-4 py-3 text-center text-blush-600 placeholder:text-blush-300 focus:border-blush-400 focus:outline-none"
       />

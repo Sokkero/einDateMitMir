@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { toIsoDate } from '../../lib/dateForm'
+
+/** All dates render in German. */
+const LOCALE = 'de'
 
 interface Props {
   /** Currently selected day (yyyy-mm-dd) or null. */
@@ -20,8 +22,6 @@ function startOfToday(): Date {
 const REF_MONDAY = new Date(2024, 0, 1) // Jan 1 2024 was a Monday.
 
 export default function Calendar({ selected, onSelect }: Props) {
-  const { i18n } = useTranslation()
-  const lang = i18n.resolvedLanguage ?? 'de'
   const today = useMemo(startOfToday, [])
 
   // The month currently displayed; starts on the current month.
@@ -29,18 +29,18 @@ export default function Calendar({ selected, onSelect }: Props) {
 
   const monthLabel = useMemo(
     () =>
-      new Intl.DateTimeFormat(lang, { month: 'long', year: 'numeric' }).format(
+      new Intl.DateTimeFormat(LOCALE, { month: 'long', year: 'numeric' }).format(
         new Date(view.year, view.month, 1),
       ),
-    [lang, view],
+    [view],
   )
 
   const weekdayLabels = useMemo(() => {
-    const fmt = new Intl.DateTimeFormat(lang, { weekday: 'short' })
+    const fmt = new Intl.DateTimeFormat(LOCALE, { weekday: 'short' })
     return Array.from({ length: 7 }, (_, i) =>
       fmt.format(new Date(REF_MONDAY.getFullYear(), REF_MONDAY.getMonth(), REF_MONDAY.getDate() + i)),
     )
-  }, [lang])
+  }, [])
 
   // Leading blanks (Monday-first) + the days of the month.
   const cells = useMemo(() => {

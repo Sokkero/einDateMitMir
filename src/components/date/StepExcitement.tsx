@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 
 interface Props {
@@ -17,7 +16,6 @@ interface Props {
  * footer. See docs/MVP.md §6.2 / §7.
  */
 export default function StepExcitement({ value, onChange }: Props) {
-  const { t } = useTranslation()
   const broken = value === 0
   // 0–100 → scale 0.8–3.4. Capped so the largest heart still fits the letter's
   // narrow paper area without clipping or spilling off the page.
@@ -43,7 +41,7 @@ export default function StepExcitement({ value, onChange }: Props) {
         max={100}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        aria-label={t('date.excitement.title')}
+        aria-label="Wie aufgeregt bist du?"
         className="mt-6 mb-20 w-full max-w-sm accent-blush-500"
       />
     </div>

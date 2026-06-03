@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next'
 import activities from '../../config/activities.json'
 
 interface Props {
@@ -31,8 +30,6 @@ for (const [path, url] of Object.entries(iconUrls)) {
  * footer. See docs/MVP.md §6.2.
  */
 export default function StepActivities({ selected, onToggle }: Props) {
-  const { t } = useTranslation()
-
   return (
     <div className="flex w-full justify-center">
       <div className="flex w-full max-w-sm flex-wrap justify-center gap-3">
@@ -63,7 +60,7 @@ export default function StepActivities({ selected, onToggle }: Props) {
                 className="h-10 w-10 sm:h-12 sm:w-12"
               />
               <span className="flex min-h-[2.5rem] items-center justify-center text-center text-xs font-semibold leading-tight text-blush-600 sm:text-sm">
-                {t(activity.labelKey)}
+                {activity.label}
               </span>
             </button>
           )

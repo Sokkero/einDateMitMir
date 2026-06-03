@@ -1,11 +1,9 @@
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { AnimatePresence, motion } from 'framer-motion'
 import { buildInviteUrl, type Invite } from '../lib/invite'
 import Letter from '../components/Letter'
 
 export default function LandingPage() {
-  const { t } = useTranslation()
   const [form, setForm] = useState<Invite>({
     inviterName: '',
     inviteeName: '',
@@ -54,39 +52,39 @@ export default function LandingPage() {
               >
                 <form onSubmit={handleSubmit} className="@container flex h-full flex-col justify-between pb-6 pt-16">
                   <div className="text-center">
-                    <h1 className="text-xl font-bold text-blush-600">{t('landing.headline')}</h1>
+                    <h1 className="text-xl font-bold text-blush-600">Lade jemanden auf ein Date ein 💘</h1>
                     <p className="mt-1 whitespace-pre-line text-sm text-blush-500">
-                      {t('landing.subline')}
+                      Erstelle süßen Link und überrasche deinen Schwarm.
                     </p>
                   </div>
 
                   <div className="flex flex-col items-start gap-3 pl-[12cqw]">
                     <label className="flex items-center gap-2">
-                      <span className={labelClass}>{t('landing.to')}</span>
+                      <span className={labelClass}>An:</span>
                       <input
                         className={inputClass}
-                        placeholder={t('landing.theirName')}
+                        placeholder="Ihr/Sein Name"
                         value={form.inviteeName}
                         onChange={update('inviteeName')}
                         required
                       />
                     </label>
                     <label className="flex items-center gap-2">
-                      <span className={labelClass}>{t('landing.from')}</span>
+                      <span className={labelClass}>Von:</span>
                       <input
                         className={inputClass}
-                        placeholder={t('landing.yourName')}
+                        placeholder="Dein Name"
                         value={form.inviterName}
                         onChange={update('inviterName')}
                         required
                       />
                     </label>
                     <label className="mt-6 flex items-center gap-2">
-                      <span className={labelClass}>{t('landing.email')}</span>
+                      <span className={labelClass}>E-Mail:</span>
                       <input
                         className={inputClass}
                         type="email"
-                        placeholder={t('landing.yourEmail')}
+                        placeholder="Deine E-Mail-Adresse"
                         value={form.inviterEmail}
                         onChange={update('inviterEmail')}
                         required
@@ -98,7 +96,7 @@ export default function LandingPage() {
                     type="submit"
                     className="mx-auto rounded-2xl bg-blush-500 px-6 py-2.5 font-semibold text-white shadow-md transition-transform hover:scale-[1.03] active:scale-95"
                   >
-                    {t('landing.send')}
+                    Senden!
                   </button>
                 </form>
               </motion.div>
@@ -113,7 +111,7 @@ export default function LandingPage() {
                 className="flex h-full flex-col items-center justify-center gap-3 text-center"
               >
                 <p className="max-w-[34rem] whitespace-pre-line text-base font-semibold text-blush-600">
-                  {t('landing.linkReady')}
+                  {'Dein Link ist fertig! 🍀\nSchick ihn deinem Schwarm. Sobald das Formular ausgefüllt ist, bekommst du eine E-Mail mit der Antwort – schau bitte auch in deinen Spam-Ordner, falls sie nicht im Posteingang landet! 💕'}
                 </p>
                 <code className="w-full max-w-[26rem] break-all rounded-lg bg-blush-50 p-2 text-xs text-blush-700">
                   {link}
@@ -123,7 +121,7 @@ export default function LandingPage() {
                   onClick={handleCopy}
                   className="rounded-full bg-blush-400 px-4 py-1.5 text-sm font-semibold text-white hover:bg-blush-500"
                 >
-                  {copied ? t('landing.copied') : t('landing.copy')}
+                  {copied ? 'Kopiert!' : 'Link kopieren'}
                 </button>
               </motion.div>
             )}

@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
 import { AnimatePresence, motion } from 'framer-motion'
 import { decodeInvite, type Invite } from '../lib/invite'
 import { emptyAnswers, type DateAnswers, type TimeOfDay } from '../lib/dateForm'
@@ -21,7 +20,8 @@ import StepNote from '../components/date/StepNote'
  * separately below — it has no letter, headline or footer.
  */
 interface StepDef {
-  titleKey: string
+  /** Headline for the step; receives the inviter's name for interpolation. */
+  title: (inviterName: string) => string
   canContinue: (a: DateAnswers) => boolean
   render: (
     a: DateAnswers,
@@ -32,7 +32,7 @@ interface StepDef {
 
 const STEPS: StepDef[] = [
   {
-    titleKey: 'date.day.title',
+    title: () => 'Welcher Tag passt dir am besten?',
     canContinue: (a) => a.date !== null && a.timeOfDay !== null,
     render: (a, set) => (
       <StepDay
@@ -44,7 +44,7 @@ const STEPS: StepDef[] = [
     ),
   },
   {
-    titleKey: 'date.activities.title',
+    title: (name) => `Was hättest du Lust mit ${name} zu unternehmen?`,
     canContinue: (a) => a.activities.length > 0,
     render: (a, set) => (
       <StepActivities
@@ -61,7 +61,7 @@ const STEPS: StepDef[] = [
     ),
   },
   {
-    titleKey: 'date.vibe.title',
+    title: () => 'Welche Stimmung soll es sein?',
     canContinue: (a) => a.vibe !== null,
     render: (a, set) => (
       <StepVibe
@@ -71,7 +71,7 @@ const STEPS: StepDef[] = [
     ),
   },
   {
-    titleKey: 'date.excitement.title',
+    title: () => 'Wie aufgeregt bist du?',
     canContinue: () => true,
     render: (a, set) => (
       <StepExcitement
@@ -81,7 +81,7 @@ const STEPS: StepDef[] = [
     ),
   },
   {
-    titleKey: 'date.note.title',
+    title: () => 'Hinterlasse eine süße Nachricht',
     canContinue: () => true,
     render: (a, set, invite) => (
       <StepNote
@@ -112,7 +112,6 @@ const headlineVariants = {
 }
 
 export default function DatePage() {
-  const { t, i18n } = useTranslation()
   const [params] = useSearchParams()
   const invite = useMemo(() => decodeInvite(params.get('d')), [params])
 
@@ -136,7 +135,7 @@ export default function DatePage() {
     setSending(true)
     setError(false)
     try {
-      const email = buildEmail(answers, invite, t, i18n.language)
+      const email = buildEmail(answers, invite)
       await sendResultEmail(invite.inviterEmail, email)
       setDone(true)
     } catch (err) {
@@ -150,7 +149,7 @@ export default function DatePage() {
   if (!invite) {
     return (
       <main className="flex min-h-dvh items-center justify-center px-6 text-center">
-        <p className="text-lg text-blush-600">{t('date.invalidLink')}</p>
+        <p className="text-lg text-blush-600">Dieser Link ist leider ungültig.</p>
       </main>
     )
   }
@@ -174,9 +173,9 @@ export default function DatePage() {
           >
             <Letter>
               <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
-                <h1 className="text-3xl font-bold text-blush-600">{t('date.done.title')}</h1>
+                <h1 className="text-3xl font-bold text-blush-600">Juhu! 🎉</h1>
                 <p className="max-w-xs whitespace-pre-line text-base font-semibold text-blush-500">
-                  {t('date.done.message', { name: invite.inviterName })}
+                  {`Wir haben deine Antwort an ${invite.inviterName} geschickt.\n${invite.inviterName} meldet sich bei dir – viel Glück bei eurem Date! 💕`}
                 </p>
               </div>
             </Letter>
@@ -216,7 +215,7 @@ export default function DatePage() {
                   transition={{ duration: 0.25, ease: 'easeInOut' }}
                   className="text-center text-2xl font-bold text-blush-600"
                 >
-                  {def && t(def.titleKey, { name: invite.inviterName })}
+                  {def && def.title(invite.inviterName)}
                 </motion.h2>
               </AnimatePresence>
             </div>
@@ -256,7 +255,7 @@ export default function DatePage() {
                     disabled={sending}
                     className="text-sm font-semibold text-blush-500 underline disabled:opacity-40"
                   >
-                    {t('date.nav.back')}
+                    Zurück
                   </button>
                 )}
                 <button
@@ -265,11 +264,11 @@ export default function DatePage() {
                   disabled={!canContinue || sending}
                   className="rounded-2xl bg-blush-500 px-8 py-3 font-bold text-white shadow-md transition-transform enabled:hover:scale-105 enabled:active:scale-95 disabled:opacity-40"
                 >
-                  {isLast ? (sending ? t('date.nav.sending') : t('date.nav.send')) : t('date.nav.next')}
+                  {isLast ? (sending ? 'Senden …' : 'Senden!') : 'Weiter'}
                 </button>
               </div>
               {error && (
-                <p className="text-sm font-semibold text-blush-600">{t('date.sendError')}</p>
+                <p className="text-sm font-semibold text-blush-600">Hoppla, das hat nicht geklappt. Versuch es bitte nochmal.</p>
               )}
             </motion.div>
           </motion.div>

@@ -1,6 +1,5 @@
-import { useTranslation } from 'react-i18next'
 import Calendar from './Calendar'
-import type { TimeOfDay } from '../../lib/dateForm'
+import { TIME_OF_DAY_LABELS, type TimeOfDay } from '../../lib/dateForm'
 
 interface Props {
   date: string | null
@@ -17,14 +16,12 @@ const TIMES: TimeOfDay[] = ['morning', 'afternoon', 'evening']
  * and footer; this component is just the form. See docs/MVP.md §6.2.
  */
 export default function StepDay({ date, timeOfDay, onDateChange, onTimeOfDayChange }: Props) {
-  const { t } = useTranslation()
-
   return (
     <div className="flex flex-col items-center gap-6 text-center">
       <Calendar selected={date} onSelect={onDateChange} />
 
       <div className="flex flex-col items-center gap-2">
-        <span className="text-sm font-semibold text-blush-400">{t('date.day.timeOfDay')}</span>
+        <span className="text-sm font-semibold text-blush-400">Tageszeit</span>
         <div className="flex gap-2">
           {TIMES.map((time) => (
             <button
@@ -38,7 +35,7 @@ export default function StepDay({ date, timeOfDay, onDateChange, onTimeOfDayChan
                   : 'border border-blush-200 bg-white/70 text-blush-500 hover:bg-blush-100')
               }
             >
-              {t(`date.day.${time}`)}
+              {TIME_OF_DAY_LABELS[time]}
             </button>
           ))}
         </div>
