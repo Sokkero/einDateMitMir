@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import HeartsBackground from '../components/HeartsBackground.tsx'
 import GlassCard from '../components/GlassCard.tsx'
 import Confetti from '../components/Confetti.tsx'
+import HeartBurst from '../components/HeartBurst.tsx'
 import StepAsk from '../components/date/StepAsk.tsx'
 import StepDay from '../components/date/StepDay.tsx'
 import StepActivities from '../components/date/StepActivities.tsx'
@@ -20,6 +21,9 @@ const TOTAL_STEPS = 6 // 0 = Ask, 1..5 = content steps
 const CONTENT_STEPS = 5 // hearts in the progress meter
 const CONFETTI_MS = 4800 // full confetti burst length
 const SLIDE_AFTER_MS = 1900 // slide while the confetti is still raining thickly
+// Red hearts radiating from behind the form on every forward step. 0..1 — the
+// amount of hearts in each burst (0 = none, 1 = a thick burst).
+const HEART_INTENSITY = 0.7
 
 export default function DatePage() {
   const [params] = useSearchParams()
@@ -33,6 +37,8 @@ export default function DatePage() {
   const [error, setError] = useState(false)
   const [done, setDone] = useState(false)
   const [celebrating, setCelebrating] = useState(false)
+  // Bumped on every forward step to remount (and replay) the heart burst.
+  const [heartBurst, setHeartBurst] = useState(0)
 
   if (!invite) {
     return (
@@ -76,6 +82,7 @@ export default function DatePage() {
   function goNext() {
     setDirection(1)
     setStep((s) => Math.min(TOTAL_STEPS - 1, s + 1))
+    setHeartBurst((n) => n + 1) // red hearts radiate from behind the form
   }
 
   // "Ja!" — fire the confetti + applause, then slide to the next step while
@@ -148,6 +155,8 @@ export default function DatePage() {
       {celebrating && (
         <Confetti duration={CONFETTI_MS} onComplete={() => setCelebrating(false)} />
       )}
+
+      {heartBurst > 0 && <HeartBurst key={heartBurst} intensity={HEART_INTENSITY} />}
 
       {/* Heart progress indicator — hidden on the Ask step */}
       {step >= 1 && (
