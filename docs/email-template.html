@@ -1,125 +1,15 @@
 <!--
-  einDateMitMir — invitee → inviter result email.
+  Paste-ready EmailJS HTML template (placeholder scaffold).
 
-  PASTE-READY EmailJS TEMPLATE. This markup goes into the EmailJS dashboard
-  template's Content (HTML / code mode) verbatim. EmailJS escapes HTML passed
-  through variables, so the LAYOUT must be typed here (renders fine) and only
-  the TEXT comes through {{tokens}} — which src/lib/email.ts sends as plain-text
-  params (matching names). See docs/MVP.md §6.3.
-
-  EmailJS template settings (outside this content):
-    To Email: {{to_email}}
-    Subject:  {{subject}}
-
-  Tokens (all plain text, filled by buildEmail in the invitee's language):
-    {{header}} {{intro}} {{closing}}
-    {{label_day}} {{value_day}} {{label_time}} {{value_time}}
-    {{label_vibe}} {{value_vibe}} {{label_excitement}} {{value_excitement}}
-    {{label_activities}} {{value_activities}} {{label_note}} {{value_note}}
-
-  Note: the sweet-note block is always shown (EmailJS free has no conditionals);
-  an empty note is filled with a localized fallback (email.noteEmpty).
-
-  Mobile-friendly: fluid card (max-width 600px), each row stacks label above
-  value, and the <style> media query is progressive enhancement only.
+  Implementation TODO: build the mobile-friendly, blush-themed, table-based
+  card per PROJECT.md §8 using the {{tokens}} produced by lib/email.ts:
+  {{header}} {{intro}} {{tag}} {{tageszeit}} {{stimmung}} {{aufregung}}
+  {{aktivitaeten}} {{nachricht}} {{closing}} {{message}}
+  Set the EmailJS "To" field to {{to_email}} and the subject to {{subject}}.
 -->
-<style>
-  @media only screen and (max-width: 480px) {
-    .edm-pad { padding-left: 20px !important; padding-right: 20px !important; }
-    .edm-header { padding: 24px 20px !important; }
-    .edm-title { font-size: 21px !important; }
-  }
-</style>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#fff5f8;margin:0;padding:16px;font-family:Helvetica,Arial,sans-serif;">
-  <tr>
-    <td align="center" style="padding:0;">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background-color:#ffffff;border-radius:24px;overflow:hidden;box-shadow:0 8px 24px rgba(230,58,124,0.12);">
-
-        <!-- Header -->
-        <tr>
-          <td class="edm-header" style="background-color:#ff4f93;padding:32px 32px 28px;text-align:center;">
-            <div class="edm-title" style="font-size:24px;font-weight:bold;color:#ffffff;line-height:1.3;">
-              {{header}}
-            </div>
-            <div style="font-size:16px;color:#ffe4ee;margin-top:8px;line-height:1.4;">
-              {{intro}}
-            </div>
-          </td>
-        </tr>
-
-        <!-- Summary card — each row stacks label above value (mobile-friendly) -->
-        <tr>
-          <td class="edm-pad" style="padding:24px 32px 8px;">
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:16px;color:#c12a64;">
-
-              <tr>
-                <td style="padding:10px 0;width:36px;font-size:22px;vertical-align:top;line-height:1.2;">📅</td>
-                <td style="padding:10px 0;">
-                  <div style="color:#ff7aad;font-weight:bold;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;">{{label_day}}</div>
-                  <div style="font-weight:bold;font-size:17px;margin-top:2px;line-height:1.4;">{{value_day}}</div>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding:10px 0;font-size:22px;vertical-align:top;line-height:1.2;">🕗</td>
-                <td style="padding:10px 0;">
-                  <div style="color:#ff7aad;font-weight:bold;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;">{{label_time}}</div>
-                  <div style="font-weight:bold;font-size:17px;margin-top:2px;line-height:1.4;">{{value_time}}</div>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding:10px 0;font-size:22px;vertical-align:top;line-height:1.2;">💞</td>
-                <td style="padding:10px 0;">
-                  <div style="color:#ff7aad;font-weight:bold;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;">{{label_vibe}}</div>
-                  <div style="font-weight:bold;font-size:17px;margin-top:2px;line-height:1.4;">{{value_vibe}}</div>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding:10px 0;font-size:22px;vertical-align:top;line-height:1.2;">❤️</td>
-                <td style="padding:10px 0;">
-                  <div style="color:#ff7aad;font-weight:bold;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;">{{label_excitement}}</div>
-                  <div style="font-size:20px;letter-spacing:3px;margin-top:2px;">{{value_excitement}}</div>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding:10px 0;font-size:22px;vertical-align:top;line-height:1.2;">🎬</td>
-                <td style="padding:10px 0;">
-                  <div style="color:#ff7aad;font-weight:bold;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;">{{label_activities}}</div>
-                  <div style="font-weight:bold;font-size:17px;margin-top:2px;line-height:1.4;">{{value_activities}}</div>
-                </td>
-              </tr>
-
-            </table>
-          </td>
-        </tr>
-
-        <!-- Sweet note (always shown; empty note uses a localized fallback) -->
-        <tr>
-          <td class="edm-pad" style="padding:8px 32px 24px;">
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffe4ee;border-radius:16px;">
-              <tr>
-                <td style="padding:18px 20px;">
-                  <div style="font-size:13px;font-weight:bold;color:#ff4f93;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">
-                    {{label_note}}
-                  </div>
-                  <div style="font-size:16px;color:#c12a64;font-style:italic;line-height:1.5;">
-                    &ldquo;{{value_note}}&rdquo;
-                  </div>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-
-        <!-- Closing -->
-        <tr>
-          <td class="edm-pad" style="padding:0 32px 36px;text-align:center;">
-            <div style="font-size:16px;color:#e63a7c;font-weight:bold;line-height:1.5;">
-              {{closing}}
-            </div>
-          </td>
-        </tr>
-
-      </table>
-    </td>
-  </tr>
-</table>
+<!doctype html>
+<html lang="de">
+  <body>
+    <p>{{message}}</p>
+  </body>
+</html>

@@ -1,28 +1,12 @@
-// Answers collected across the multi-step date form (see docs/MVP.md §6.2).
-// Nothing is persisted until final submit; this is just in-memory wizard state.
-
 export type TimeOfDay = 'morning' | 'afternoon' | 'evening'
 
-/** German labels for each time of day, shared by the form and the email. */
-export const TIME_OF_DAY_LABELS: Record<TimeOfDay, string> = {
-  morning: 'Morgens',
-  afternoon: 'Nachmittags',
-  evening: 'Abends',
-}
-
 export interface DateAnswers {
-  /** Chosen day as a local ISO date string (yyyy-mm-dd), or null. */
-  date: string | null
-  /** Chosen time of day, or null. */
+  date: string | null // local ISO yyyy-mm-dd
   timeOfDay: TimeOfDay | null
-  /** Selected activity ids (see src/config/activities.json). */
-  activities: string[]
-  /** Chosen vibe id (single-select, see src/config/vibes.json), or null. */
-  vibe: string | null
-  /** Excitement level, 0–100, from the heart-meter slider. */
-  excitement: number
-  /** Optional sweet note from the invitee. */
-  note: string
+  activities: string[] // selected activity ids
+  vibe: string | null // single vibe id
+  excitement: number // 0–100
+  note: string // optional free text
 }
 
 export const emptyAnswers: DateAnswers = {
@@ -34,10 +18,19 @@ export const emptyAnswers: DateAnswers = {
   note: '',
 }
 
-/** Format a local date as yyyy-mm-dd without timezone drift. */
+/**
+ * Format a Date as a local `yyyy-mm-dd` string.
+ * Never use toISOString() for day values — it causes timezone drift.
+ */
 export function toIsoDate(d: Date): string {
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
   const day = String(d.getDate()).padStart(2, '0')
-  return `${y}-${m}-${day}`
+  return `${year}-${month}-${day}`
+}
+
+/** Parse a local `yyyy-mm-dd` string back into a local Date. */
+export function fromIsoDate(iso: string): Date {
+  const [year, month, day] = iso.split('-').map(Number)
+  return new Date(year, month - 1, day)
 }
