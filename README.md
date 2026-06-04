@@ -1,6 +1,6 @@
 # einDateMitMir 💘
 
-<a url="einDateMitMir.com">The webpage for your girlfriend.</a>
+[`The webpage for your girlfriend.`](https://einDateMitMir.com)
 
 
 A playful, romantic single-page web app for asking your crush on a date. See
