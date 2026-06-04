@@ -330,7 +330,7 @@ Personalize copy with the inviter's/invitee's names where noted.
   { "id": "netflixandchill", "icon": "🍿", "label": "Netflix & Chillen" },
   { "id": "bicycletour",     "icon": "🚲", "label": "Fahrradtour" },
   { "id": "cooking",         "icon": "🍳", "label": "Zusammen kochen" },
-  { "id": "privateTime",     "icon": "🔥", "label": "Zweisamkeit" },
+  { "id": "privateTime",     "icon": "💕", "label": "Zweisamkeit" },
   { "id": "icecream",        "icon": "🍦", "label": "Eis essen" },
   { "id": "zoo",             "icon": "🦁", "label": "Zoo-Besuch" },
   { "id": "hangout",         "icon": "🛋️", "label": "Abhängen" },
@@ -347,7 +347,7 @@ Personalize copy with the inviter's/invitee's names where noted.
   { "id": "fancy",       "icon": "🥂",  "label": "Schick" },
   { "id": "adventurous", "icon": "🧗",  "label": "Abenteuerlich" },
   { "id": "cozy",        "icon": "🛋️", "label": "Gemütlich" },
-  { "id": "spicy",       "icon": "🌶️", "label": "Feurig" }
+  { "id": "spicy",       "icon": "🌶️", "label": "Heiß" }
 ]
 ```
 

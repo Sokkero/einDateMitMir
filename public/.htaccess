@@ -1,0 +1,14 @@
+# SPA catch-all: serve index.html for any path that isn't a real file/dir.
+# Required for client-side routing (React Router) on Apache/cPanel hosts.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # If the request maps to an existing file or directory, serve it as-is.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Otherwise, hand the request to the SPA entry point.
+  RewriteRule ^ index.html [L]
+</IfModule>

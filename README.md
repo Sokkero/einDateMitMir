@@ -73,5 +73,7 @@ This is a client-routed SPA, so static hosts must rewrite all paths to
 `index.html`, otherwise deep links like `/date?d=…` 404 on reload.
 
 - **Netlify:** handled by [`public/_redirects`](./public/_redirects).
+- **Apache / cPanel (e.g. Namespace, IONOS, Strato):** handled by
+  [`public/.htaccess`](./public/.htaccess) — make sure hidden files are uploaded.
 - **Vercel:** add a rewrite `{ "source": "/(.*)", "destination": "/index.html" }`.
 - **GitHub Pages / other static hosts:** configure an equivalent SPA fallback.

@@ -3,5 +3,5 @@
   { "id": "fancy", "icon": "🥂", "label": "Schick" },
   { "id": "adventurous", "icon": "🧗", "label": "Abenteuerlich" },
   { "id": "cozy", "icon": "🛋️", "label": "Gemütlich" },
-  { "id": "spicy", "icon": "🌶️", "label": "Feurig" }
+  { "id": "spicy", "icon": "🌶️", "label": "Heiß" }
 ]
