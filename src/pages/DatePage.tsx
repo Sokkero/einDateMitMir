@@ -14,9 +14,12 @@ import { decodeInvite } from '../lib/invite.ts'
 import { emptyAnswers, type DateAnswers, type TimeOfDay } from '../lib/dateForm.ts'
 import { buildEmail } from '../lib/email.ts'
 import { sendEmail } from '../lib/sendEmail.ts'
+import { playApplause } from '../lib/applause.ts'
 
 const TOTAL_STEPS = 6 // 0 = Ask, 1..5 = content steps
 const CONTENT_STEPS = 5 // hearts in the progress meter
+const CONFETTI_MS = 4800 // full confetti burst length
+const SLIDE_AFTER_MS = 1900 // slide while the confetti is still raining thickly
 
 export default function DatePage() {
   const [params] = useSearchParams()
@@ -29,6 +32,7 @@ export default function DatePage() {
   const [sending, setSending] = useState(false)
   const [error, setError] = useState(false)
   const [done, setDone] = useState(false)
+  const [celebrating, setCelebrating] = useState(false)
 
   if (!invite) {
     return (
@@ -72,6 +76,16 @@ export default function DatePage() {
   function goNext() {
     setDirection(1)
     setStep((s) => Math.min(TOTAL_STEPS - 1, s + 1))
+  }
+
+  // "Ja!" — fire the confetti + applause, then slide to the next step while
+  // the burst is still raining thickly, so the transition visibly happens
+  // over the celebration. Confetti is rendered at this level (and runs the
+  // full CONFETTI_MS) so it keeps falling across the step change.
+  function celebrateThenAdvance() {
+    setCelebrating(true)
+    playApplause()
+    window.setTimeout(goNext, SLIDE_AFTER_MS)
   }
 
   function goBack() {
@@ -131,6 +145,10 @@ export default function DatePage() {
     <main className="relative flex min-h-full flex-col items-center justify-center p-5 sm:p-8">
       <HeartsBackground />
 
+      {celebrating && (
+        <Confetti duration={CONFETTI_MS} onComplete={() => setCelebrating(false)} />
+      )}
+
       {/* Heart progress indicator — hidden on the Ask step */}
       {step >= 1 && (
         <div className="mb-4 flex gap-1.5" aria-label={`Schritt ${step} von ${CONTENT_STEPS}`}>
@@ -162,7 +180,7 @@ export default function DatePage() {
               <StepAsk
                 inviteeName={invite.inviteeName}
                 inviterName={invite.inviterName}
-                onYes={goNext}
+                onYes={celebrateThenAdvance}
               />
             )}
             {step === 1 && (

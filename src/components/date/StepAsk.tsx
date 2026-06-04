@@ -23,10 +23,12 @@ const MAX_YES_SCALE = 1.6
 export default function StepAsk({ inviteeName, inviterName, onYes }: StepAskProps) {
   const playRef = useRef<HTMLDivElement>(null)
   const noRef = useRef<HTMLButtonElement>(null)
+  const yesRef = useRef<HTMLButtonElement>(null)
   const [noPos, setNoPos] = useState<Pos | null>(null)
   const [yesScale, setYesScale] = useState(1)
   const [dodges, setDodges] = useState(0)
   const [taunt, setTaunt] = useState<Pos | null>(null)
+  const [celebrating, setCelebrating] = useState(false)
 
   function flee() {
     const play = playRef.current
@@ -39,6 +41,28 @@ export default function StepAsk({ inviteeName, inviterName, onYes }: StepAskProp
     const maxX = Math.max(0, playRect.width - bw)
     const maxY = Math.max(0, playRect.height - bh)
 
+    // "Ja!" sits centered and grows; "Nein" must never land behind it.
+    // Compute the forbidden rectangle in play-relative coordinates, padded
+    // so the two buttons never even visually touch.
+    const PAD = 16
+    let forbidden: { x1: number; y1: number; x2: number; y2: number } | null = null
+    const yesBtn = yesRef.current
+    if (yesBtn) {
+      const yesRect = yesBtn.getBoundingClientRect()
+      forbidden = {
+        x1: yesRect.left - playRect.left - bw - PAD,
+        y1: yesRect.top - playRect.top - bh - PAD,
+        x2: yesRect.right - playRect.left + PAD,
+        y2: yesRect.bottom - playRect.top + PAD,
+      }
+    }
+    const overlapsYes = (x: number, y: number) =>
+      forbidden !== null &&
+      x > forbidden.x1 &&
+      x < forbidden.x2 &&
+      y > forbidden.y1 &&
+      y < forbidden.y2
+
     // Mark where "Nein" currently sits so the taunt can appear there.
     const current = noPos ?? {
       x: noBtn.offsetLeft,
@@ -46,24 +70,38 @@ export default function StepAsk({ inviteeName, inviterName, onYes }: StepAskProp
     }
     setTaunt(current)
 
-    // Pseudo-random far jump; ensure it actually moves a meaningful distance.
+    // Pseudo-random far jump that (a) moves a meaningful distance and
+    // (b) does not overlap the "Ja!" button. Keep the best non-overlapping
+    // candidate found; fall back to any non-overlapping spot.
     let nx = current.x
     let ny = current.y
-    for (let i = 0; i < 8; i++) {
+    let found = false
+    for (let i = 0; i < 40; i++) {
       const candX = Math.random() * maxX
       const candY = Math.random() * maxY
-      if (Math.hypot(candX - current.x, candY - current.y) > 120) {
-        nx = candX
-        ny = candY
-        break
-      }
+      if (overlapsYes(candX, candY)) continue
       nx = candX
       ny = candY
+      found = true
+      if (Math.hypot(candX - current.x, candY - current.y) > 120) break
+    }
+
+    // Extreme fallback (tiny play area): hug a corner away from center.
+    if (!found) {
+      nx = current.x < maxX / 2 ? maxX : 0
+      ny = current.y < maxY / 2 ? maxY : 0
     }
 
     setNoPos({ x: nx, y: ny })
     setDodges((d) => d + 1)
     setYesScale((s) => Math.min(MAX_YES_SCALE, s + 0.08))
+  }
+
+  function handleYes() {
+    if (celebrating) return
+    setCelebrating(true)
+    // Confetti + applause + the (delayed) slide are orchestrated by the parent.
+    onYes()
   }
 
   function handlePointerMove(e: React.PointerEvent) {
@@ -101,8 +139,9 @@ export default function StepAsk({ inviteeName, inviterName, onYes }: StepAskProp
         {/* Ja! sits centered and grows with every dodge. */}
         <div className="absolute inset-0 flex items-center justify-center">
           <motion.button
+            ref={yesRef}
             type="button"
-            onClick={onYes}
+            onClick={handleYes}
             animate={{ scale: yesScale }}
             whileHover={{ scale: yesScale * 1.04 }}
             whileTap={{ scale: yesScale * 0.95 }}
