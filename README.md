@@ -1,6 +1,7 @@
 # einDateMitMir 💘
 
-The webpage for your girlfriend.
+<a url="einDateMitMir.com">The webpage for your girlfriend.</a>
+
 
 A playful, romantic single-page web app for asking your crush on a date. See
 [`PROJECT.md`](./PROJECT.md) for the full project brief — it is the source of
