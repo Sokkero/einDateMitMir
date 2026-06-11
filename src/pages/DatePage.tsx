@@ -15,7 +15,6 @@ import { decodeInvite } from '../lib/invite.ts'
 import { emptyAnswers, type DateAnswers, type TimeOfDay } from '../lib/dateForm.ts'
 import { buildEmail } from '../lib/email.ts'
 import { sendEmail } from '../lib/sendEmail.ts'
-import { playApplause } from '../lib/applause.ts'
 
 const TOTAL_STEPS = 6 // 0 = Ask, 1..5 = content steps
 const CONTENT_STEPS = 5 // hearts in the progress meter
@@ -85,13 +84,12 @@ export default function DatePage() {
     setHeartBurst((n) => n + 1) // red hearts radiate from behind the form
   }
 
-  // "Ja!" — fire the confetti + applause, then slide to the next step while
-  // the burst is still raining thickly, so the transition visibly happens
-  // over the celebration. Confetti is rendered at this level (and runs the
-  // full CONFETTI_MS) so it keeps falling across the step change.
+  // "Ja!" — fire the confetti, then slide to the next step while the burst is
+  // still raining thickly, so the transition visibly happens over the
+  // celebration. Confetti is rendered at this level (and runs the full
+  // CONFETTI_MS) so it keeps falling across the step change.
   function celebrateThenAdvance() {
     setCelebrating(true)
-    playApplause()
     window.setTimeout(goNext, SLIDE_AFTER_MS)
   }
 

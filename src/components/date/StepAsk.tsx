@@ -100,7 +100,7 @@ export default function StepAsk({ inviteeName, inviterName, onYes }: StepAskProp
   function handleYes() {
     if (celebrating) return
     setCelebrating(true)
-    // Confetti + applause + the (delayed) slide are orchestrated by the parent.
+    // Confetti + the (delayed) slide are orchestrated by the parent.
     onYes()
   }
 
